@@ -18,8 +18,10 @@
 
 #include <common.h>
 
+// PC and GPR
+// 状态转移
 typedef struct {
-  word_t gpr[MUXDEF(CONFIG_RVE, 16, 32)];
+  word_t gpr[MUXDEF(CONFIG_RVE, 16, 32)]; // RVE 可能表示一个精简版本的 RISC-V 架构，包括较少的寄存器或简化的功能集
   vaddr_t pc;
 } MUXDEF(CONFIG_RV64, riscv64_CPU_state, riscv32_CPU_state);
 
@@ -27,7 +29,7 @@ typedef struct {
 typedef struct {
   union {
     uint32_t val;
-  } inst;
+  } inst; //32bit instruction
 } MUXDEF(CONFIG_RV64, riscv64_ISADecodeInfo, riscv32_ISADecodeInfo);
 
 #define isa_mmu_check(vaddr, len, type) (MMU_DIRECT)

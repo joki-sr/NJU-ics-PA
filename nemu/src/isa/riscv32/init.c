@@ -16,18 +16,20 @@
 #include <isa.h>
 #include <memory/paddr.h>
 
+// 作用域仅限于定义它的文件,read_only, 20B
 // this is not consistent with uint8_t
 // but it is ok since we do not access the array directly
 static const uint32_t img [] = {
+  // 将当前 PC（程序计数器）的高 20 位加载到寄存器 t0 中
   0x00000297,  // auipc t0,0
   0x00028823,  // sb  zero,16(t0)
   0x0102c503,  // lbu a0,16(t0)
-  0x00100073,  // ebreak (used as nemu_trap)
+  0x00100073,  // ebreak (used as nemu_trap)  用于触发一个断点异常（在 RISC-V 中用于调试或异常处理）
   0xdeadbeef,  // some data
 };
 
 static void restart() {
-  /* Set the initial program counter. */
+  /* Set the initial program counter. 将一个内置的客户程序读入到内存*/
   cpu.pc = RESET_VECTOR;
 
   /* The zero register is always 0. */
@@ -38,6 +40,6 @@ void init_isa() {
   /* Load built-in image. */
   memcpy(guest_to_host(RESET_VECTOR), img, sizeof(img));
 
-  /* Initialize this virtual computer system. */
+  /* Initialize this virtual computer system. 初始化寄存器 */
   restart();
 }

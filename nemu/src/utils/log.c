@@ -21,11 +21,11 @@ extern uint64_t g_nr_guest_inst;
 FILE *log_fp = NULL;
 
 void init_log(const char *log_file) {
-  log_fp = stdout;
-  if (log_file != NULL) {
+  log_fp = stdout; // 日志文件指针 log_fp，默认情况下日志会输出到终端
+  if (log_file != NULL) { // 日志要写入指定文件
     FILE *fp = fopen(log_file, "w");
     Assert(fp, "Can not open '%s'", log_file);
-    log_fp = fp;
+    log_fp = fp; // 将日志文件指针 log_fp 设置为该文件指针
   }
   Log("Log is written to %s", log_file ? log_file : "stdout");
 }

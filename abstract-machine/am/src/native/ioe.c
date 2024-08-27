@@ -53,9 +53,10 @@ static void *lut[128] = {
   [AM_NET_CONFIG  ] = __am_net_config,
 };
 
+// 初始化 I/O 设备
 bool ioe_init() {
-  panic_on(cpu_current() != 0, "call ioe_init() in other CPUs");
-  panic_on(ioe_init_done, "double-initialization");
+  panic_on(cpu_current() != 0, "call ioe_init() in other CPUs"); //  防止在非主 CPU 上调用
+  panic_on(ioe_init_done, "double-initialization"); // 防止重复调用ioe_init
   __am_has_ioe = true;
   return true;
 }
