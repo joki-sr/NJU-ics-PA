@@ -71,6 +71,8 @@ static void exec_once(Decode *s, vaddr_t pc) {
 #endif
 }
 
+// 模拟了CPU的工作方式: 不断执行指令
+// n=-1 : 
 static void execute(uint64_t n) {
   Decode s;
   for (;n > 0; n --) {
