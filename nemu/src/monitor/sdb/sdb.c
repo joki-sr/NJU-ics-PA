@@ -43,15 +43,21 @@ static char* rl_gets() {
   return line_read;
 }
 
-
+// str is not NULL
+// NAN: return -1
+// base: 2,8,10,16
 int str_to_int(char * str){
   char *pos = str;
   int n = 0;
-  while (pos)
-  {
-    n = n * 10 + (int)*pos - (int)'0';
-    pos++;
+  char *end;
+
+  //check
+  if( !('0' < pos[0] && pos[0] < '9')){
+    printf("arg is NOT a num.\n");
+    return -1;
   }
+
+  n = strtol(str, &end, 10);
   return n;
 }
 
@@ -69,20 +75,28 @@ static int cmd_q(char *args) {
 
 static int cmd_si(char *args) {
   int n = 0;
-  char *arg = strtok(NULL, " ");//num of steps
+  // char *arg = strtok(NULL, " ");//num of steps
   // char *pos = arg;
   // Get num
-  if(arg == NULL) { //default
+  // sscanf(args,%u,n);
+  printf("cmd_si arg is: %d\n",*args);
+  if(args == NULL) { //default
     n = 1;
-  }else if ( '0' < arg[0] || arg[0] > 9){ //not num
-    printf("Error format. Example: (nemu)si 10\n");
-    n = 0;
-  }else{
-    // while(pos) {
-    //   n = n * 10 + (int)*pos - (int)'0';
-    //   pos++;
-    // }
-    n = str_to_int(arg);
+  }
+  // else if ( '0' < args[0] || args[0] > 9){ //not num
+  //   printf("Error format. Example: (nemu)si 10\n");
+  //   n = 0;
+  // }else{
+  //   // while(pos) {
+  //   //   n = n * 10 + (int)*pos - (int)'0';
+  //   //   pos++;
+  //   // }
+  //   n = str_to_int(args);
+  //   // char *end;
+  //   // n = strtol(args, &end, 10);
+  // }
+  else{
+    n = str_to_int(args);
   }
   cpu_exec(n);
   return 0;
@@ -93,20 +107,44 @@ static int cmd_info_r(char *args) {
   return 0;
 }
 
+static int cmd_info_w(char *args) {
+  // todo
+  return 0;
+}
+
+static int cmd_info(char *args){
+  char *arg = strtok(NULL, " ");
+  if( arg[0] == 'r'){
+    cmd_info_r(strtok(NULL, " "));
+  }else if( arg[0] == 'w'){
+    cmd_info_w(strtok(NULL, " "));
+  }else{
+    printf("Unknown cmd.");
+  }
+  return 0;
+}
+
   
 // x 10 0x80000000
 // x N  guest_addr
 static int cmd_x(char *args) {
   char *num = strtok(NULL, " ");
-  char *addr_str = strtok(NULL," ");
-  int n = str_to_int(num);
-  vaddr_t addr;
-  sscanf(addr_str, "%x", &addr);
+  char *addr = strtok(NULL," ");
+  int n ;
+  vaddr_t vaddr;
+
+  //parse
+  if( num == NULL || addr == NULL){
+    printf("Error format of cmd_x\n");
+    return 0;
+  }
+  n = str_to_int(num);
+  sscanf(addr, "%x", &vaddr);
 
   int i;
   for(i=0;i<n;i++){
-    printf("0x%10x : 0x%10x\n", addr, vaddr_read(addr, 4));
-    addr++;
+    printf("0x%10x : 0x%10x\n", vaddr, vaddr_read(vaddr, 4));
+    vaddr++;
   }
   return 0;
 }
@@ -123,7 +161,7 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "x", "Scan memory and print the value", cmd_x},
   { "si", "Execute N instructions and then stop, default: 1 step", cmd_si},
-  { "info_r", "Print regs status", cmd_info_r}
+  { "info", "info r: regs\ninfo w: watching points", cmd_info}
 
   /* TODO: Add more commands */
 
