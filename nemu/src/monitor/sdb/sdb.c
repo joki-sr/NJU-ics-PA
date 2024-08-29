@@ -117,28 +117,28 @@ static int cmd_si(char *args) {
   return 0;
 }
 
-static int cmd_info_r(char *args) {
+static int cmd_info_r() {
   isa_reg_display();
   return 0;
 }
 
-static int cmd_info_w(char *args) {
+static int cmd_info_w() {
   // todo
   return 0;
 }
 
 static int cmd_info(char *args){
   char *arg = strtok(NULL, " ");
-  if(arg == NULL){
-    //todo?
+  char *end = strtok(NULL, " ");
+  if(arg == NULL || end != NULL){
     return 0;
   }
-  if( arg[0] == 'r'){
-    cmd_info_r(strtok(NULL, " "));
-  }else if( arg[0] == 'w'){
-    cmd_info_w(strtok(NULL, " "));
+  if( arg[0] == 'r' ){
+    cmd_info_r();
+  }else if( arg[0] == 'w' ){
+    cmd_info_w();
   }else{
-    printf("Unknown cmd.");
+    printf("Unknown cmd.\n");
   }
   return 0;
 }
