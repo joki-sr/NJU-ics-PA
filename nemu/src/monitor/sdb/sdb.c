@@ -129,6 +129,10 @@ static int cmd_info_w(char *args) {
 
 static int cmd_info(char *args){
   char *arg = strtok(NULL, " ");
+  if(arg == NULL){
+    //todo?
+    return 0;
+  }
   if( arg[0] == 'r'){
     cmd_info_r(strtok(NULL, " "));
   }else if( arg[0] == 'w'){
