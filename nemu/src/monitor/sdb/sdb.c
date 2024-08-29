@@ -97,6 +97,7 @@ static int cmd_si(char *args) {
   else{
     n = str_to_int(args);
   }
+  printf("i'll run %d steps\n",n);
   cpu_exec(n);
   return 0;
 }
