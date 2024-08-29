@@ -43,22 +43,36 @@ static char* rl_gets() {
   return line_read;
 }
 
-// str is not NULL
+// str must after strtok()
+// make sure str is not NULL
 // NAN: return -1
 // base: 2,8,10,16
 int str_to_int(char * str){
-  char *pos = str;
+  // char *pos = str;
   int n = 0;
   char *end;
 
-  //check
-  if( pos[0] < '0' || pos[0] > '9'){
-    printf("arg is NOT a num.\n");
-    return -1;
-  }
+  // //check the first char
+  // if( pos[0] < '0' || pos[0] > '9'){
+  //   printf("arg is NOT a num.\n");
+  //   return -1;
+  // }
+  // n = strtol(str, &end, 10);
+  // //check the end char
+  // if(*end == '\0')
+  //   return n;
+  // else{
+  //   printf("arg is NOT a num.\n");
+  //   return -1;
+  // }
 
   n = strtol(str, &end, 10);
-  return n;
+  if( *end != '\0' ){
+    printf("arg is NOT a num.\n");
+    return -1;
+  }else{
+    return n;
+  }
 }
 
 static int cmd_c(char *args) {
@@ -97,7 +111,7 @@ static int cmd_si(char *args) {
   else{
     n = str_to_int(args);
   }
-  //printf("i'll run %d steps\n",n);
+  printf("i'll run %d steps\n",n);
   if(n < 0) n = 0;
   cpu_exec(n);
   return 0;
