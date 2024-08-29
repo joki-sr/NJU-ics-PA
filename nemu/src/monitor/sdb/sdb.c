@@ -18,6 +18,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include <memory/vaddr.h>
 
 static int is_batch_mode = false;
 
@@ -42,6 +43,18 @@ static char* rl_gets() {
   return line_read;
 }
 
+
+int str_to_int(char * str){
+  char *pos = str;
+  int n = 0;
+  while (pos)
+  {
+    n = n * 10 + (int)*pos - (int)'0';
+    pos++;
+  }
+  return n;
+}
+
 static int cmd_c(char *args) {
   cpu_exec(-1);
   return 0;
@@ -54,6 +67,50 @@ static int cmd_q(char *args) {
   //return -1;
 }
 
+static int cmd_si(char *args) {
+  int n = 0;
+  char *arg = strtok(NULL, " ");//num of steps
+  // char *pos = arg;
+  // Get num
+  if(arg == NULL) { //default
+    n = 1;
+  }else if ( '0' < arg[0] || arg[0] > 9){ //not num
+    printf("Error format. Example: (nemu)si 10\n");
+    n = 0;
+  }else{
+    // while(pos) {
+    //   n = n * 10 + (int)*pos - (int)'0';
+    //   pos++;
+    // }
+    n = str_to_int(arg);
+  }
+  cpu_exec(n);
+  return 0;
+}
+
+static int cmd_info_r(char *args) {
+  isa_reg_display();
+  return 0;
+}
+
+  
+// x 10 0x80000000
+// x N  guest_addr
+static int cmd_x(char *args) {
+  char *num = strtok(NULL, " ");
+  char *addr_str = strtok(NULL," ");
+  int n = str_to_int(num);
+  vaddr_t addr;
+  sscanf(addr_str, "%x", &addr);
+
+  int i;
+  for(i=0;i<n;i++){
+    printf("0x%10x : 0x%10x\n", addr, vaddr_read(addr, 4));
+    addr++;
+  }
+  return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -64,6 +121,9 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
+  { "x", "Scan memory and print the value", cmd_x},
+  { "si", "Execute N instructions and then stop, default: 1 step", cmd_si},
+  { "info_r", "Print regs status", cmd_info_r}
 
   /* TODO: Add more commands */
 

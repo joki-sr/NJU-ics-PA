@@ -56,4 +56,15 @@ union isa_gdb_regs {
   };
 };
 
+// of riscv32:
+// union isa_gdb_regs {
+//   struct {
+//     uint32_t gpr[32];
+//     uint32_t pc;
+//   }
+//   struct {
+//     uint32_t array[77];
+//   };
+// };
+
 #endif
