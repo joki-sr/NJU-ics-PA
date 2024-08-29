@@ -142,7 +142,7 @@ static int cmd_x(char *args) {
 
   int i;
   for(i=0;i<n;i++){
-    printf("0x%-10x : 0x%-10x\n", vaddr, vaddr_read(vaddr, 4));
+    printf("0x%x: 0x%-10x\n", vaddr, vaddr_read(vaddr, 4));
     vaddr++;
   }
   return 0;
