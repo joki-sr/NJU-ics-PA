@@ -52,7 +52,7 @@ int str_to_int(char * str){
   char *end;
 
   //check
-  if( !('0' < pos[0] && pos[0] < '9')){
+  if( pos[0] < '0' || pos[0] > '9'){
     printf("arg is NOT a num.\n");
     return -1;
   }
