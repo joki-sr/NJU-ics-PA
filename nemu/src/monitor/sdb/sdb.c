@@ -79,7 +79,6 @@ static int cmd_si(char *args) {
   // char *pos = arg;
   // Get num
   // sscanf(args,%u,n);
-  printf("cmd_si arg is: %d\n",*args);
   if(args == NULL) { //default
     n = 1;
   }
@@ -161,7 +160,7 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "x", "Scan memory and print the value", cmd_x},
   { "si", "Execute N instructions and then stop, default: 1 step", cmd_si},
-  { "info", "info r: regs\ninfo w: watching points", cmd_info}
+  { "info", "r: regs / w: watching points", cmd_info}
 
   /* TODO: Add more commands */
 
