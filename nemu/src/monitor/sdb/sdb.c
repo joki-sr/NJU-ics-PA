@@ -147,17 +147,20 @@ static int cmd_info(char *args){
 // x 10 0x80000000
 // x N  guest_addr
 static int cmd_x(char *args) {
+  //parse
   char *num = strtok(NULL, " ");
   char *addr = strtok(NULL," ");
+  char *end = strtok(NULL, " ");
   int n ;
   vaddr_t vaddr;
-
-  //parse
-  if( num == NULL || addr == NULL){
+  if( num == NULL || addr == NULL || end != NULL){
     printf("Error format of cmd_x\n");
     return 0;
   }
+
+  //get val
   n = str_to_int(num);
+  if(n < 0) return 0;
   sscanf(addr, "%x", &vaddr);
 
   int i;
