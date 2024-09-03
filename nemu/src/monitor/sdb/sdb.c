@@ -150,7 +150,7 @@ static int cmd_p(char *args){
 
   bool success;
   int val = expr(args, &success);
-  printf("expression value is : %d]n", val);
+  printf("expression value is : %d\n", val);
   return 0;
 }
 

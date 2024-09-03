@@ -117,6 +117,7 @@ static int make_token(char *e) {
          * of tokens, some extra actions should be performed.
          */
         switch (rules[i].token_type) {
+          case 0: break;
           case TK_NOTYPE: break;//不记录space
           default:
             // 记录匹配的token：str，type
