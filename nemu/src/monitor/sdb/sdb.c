@@ -83,8 +83,9 @@ static int cmd_c(char *args) {
 
 static int cmd_q(char *args) {
   printf("Quiting nemu...\n");
+  nemu_state.state = NEMU_QUIT;
   //exit(0);
-  return -1;
+  return 0;
 }
 
 static int cmd_si(char *args) {
