@@ -250,8 +250,9 @@ static uint32_t eval(int p, int q){
         break;
       case TK_PAREN_CLOSE:
         flag = 1;
+      case TK_INTEGER:
+        break;
       default:
-        //not an operator;
         assert(0);
         break;
       }
