@@ -117,6 +117,7 @@ static bool make_token(char *e) {
           case TK_NOTYPE: break;//不记录space
           default:
             // 记录匹配的token：str，type
+            printf("i'll store this token\n");
             memcpy(tokens[i].str, substr_start, substr_len);
             tokens[i].type = rules[i].token_type;
             break;
