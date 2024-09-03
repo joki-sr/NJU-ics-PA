@@ -84,7 +84,8 @@ typedef struct token {
 static Token tokens[32] __attribute__((used)) = {};//不被优化；初始化默认值
 static int nr_token __attribute__((used))  = 0;//分析后得到的token数量
 
-static bool make_token(char *e) {
+//return number of tokens ,max: 32.
+static int make_token(char *e) {
   int position = 0;
   int i;
   regmatch_t pmatch;
@@ -117,6 +118,7 @@ static bool make_token(char *e) {
           case TK_NOTYPE: break;//不记录space
           default:
             // 记录匹配的token：str，type
+            nr_token++;
             printf("i'll store this token\n");
             memcpy(tokens[i].str, substr_start, substr_len);
             tokens[i].type = rules[i].token_type;
@@ -133,18 +135,151 @@ static bool make_token(char *e) {
     }
   }
 
+  return nr_token;
+}
+
+// (...)
+bool check_parentheses(int p, int q){
+  if( ! (tokens[p].type == TK_PAREN_OPEN && tokens[q].type == TK_PAREN_CLOSE) )
+    return false;
+  
+  int sum = 0;
+  for(int i=p;i<=q;i++){
+    switch (tokens[i].type)
+    {
+    case TK_PAREN_OPEN:
+      sum++;
+      break;
+    case TK_PAREN_CLOSE:
+      if(sum<1)return false;
+      sum--;
+    default:
+      break;
+    }
+  }
+  if(sum)return false;
   return true;
 }
 
+//-1: a < b
+// 0: a=b
+// 1: a>b
+static int op_bigger_than(int a, int b){
+  if(a == TK_MINUS || a == TK_PLUS) 
+    a = 1;
+  else if(a == TK_DIVIDE || a == TK_MULTIPLY) 
+    a = 2;
+  else
+    a = 3;
+
+  if((b == TK_MINUS || b == TK_PLUS)) b = 1;
+  else if(b == TK_DIVIDE || b == TK_MULTIPLY) b = 2;
+  else b = 3;
+
+  if( a < b)return -1;
+  else if(a == b)return 0;
+  else return 1;
+
+  // if( (a == TK_MINUS || a == TK_PLUS) && (b == TK_MINUS || b == TK_PLUS))
+  //   return 0;
+  // if( (a == TK_DIVIDE || a == TK_MULTIPLY) && (b == TK_DIVIDE || b == TK_MULTIPLY))
+  //   return 0;
+  // if
+}
+
+// tokens[p] ~ tokens[q]
+// error result: UINT32_MAX
+static uint32_t eval(int p, int q){
+  uint32_t ret = 0;
+  if (p > q) {
+    /* Bad expression */
+    printf("error: eval() p > q\n");
+    ret = UINT32_MAX;
+  }else if (p == q) {
+    /* Single token.
+     * For now this token should be a number.
+     * Return the value of the number.
+     */
+    char *end;
+    unsigned long ul = strtoul(tokens[p].str, &end, 10);
+    if(*end != '\0'){
+      printf("error: eval() p == q, conversion error, wrong format of tokens[%d]:str=%s, type = %d.\n", p, tokens[p].str,tokens[p].type);
+      ret = UINT32_MAX;
+    }else{
+      ret = (uint32_t)ul;
+    }
+  // p < q && ...
+  }else if (check_parentheses(p, q) == true) {
+    /* The expression is surrounded by a matched pair of parentheses.
+     * If that is the case, just throw away the parentheses.
+     */
+    return eval(p + 1, q - 1);
+  }else {
+    /* We should do more things here. */
+    //scan and find the main operator
+    int i;
+    int flag = 1;
+    int mtype = 666, mpos = p, type;
+    for(i=p;i<=q;i++){
+      type = tokens[i].type;
+      switch ( type )
+      {
+      case TK_PLUS:
+        //op = '+';
+        //break;
+      case TK_MINUS:
+        //op = '-';
+        //break;
+      case TK_MULTIPLY:
+        //op = '*';
+        //break;
+      case TK_DIVIDE:
+        //op = '/';
+        //if(flag) mop=(mop<op)?op:mop; //not in (),choose bigger.
+        // not in () && type < mtype
+        if(flag == 1 && op_bigger_than(type, mtype) == -1){
+          mtype = type;
+          mpos = i;
+        }
+        break;
+      case TK_PAREN_OPEN:
+        flag = 0;
+        break;
+      case TK_PAREN_CLOSE:
+        flag = 1;
+      default:
+        //not an operator;
+        assert(0);
+        break;
+      }
+    }
+    //after find main op
+    int val1 = eval(p, mpos - 1);
+    int val2 = eval(mpos + 1, q);
+
+    switch (mtype) {
+      case TK_PLUS: return val1 + val2;
+      case TK_MINUS: return val1 - val2;
+      case TK_MULTIPLY: return val1 * val2;
+      case TK_DIVIDE: 
+        if(val2 == 0)assert(0);
+        return val1 / val2;
+      default: assert(0);
+  }
+  }
+  return ret;
+}
 
 word_t expr(char *e, bool *success) {
-  if (!make_token(e)) {
+  int nr_token = make_token(e);
+  if ( nr_token == 0) {
     *success = false;
     return 0;
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  //TODO();
-
-  return 0;
+  // tokens[0:nrtoken]
+  uint32_t ans = 0;
+  ans = eval(0,nr_token-1);
+  return ans;
 }
