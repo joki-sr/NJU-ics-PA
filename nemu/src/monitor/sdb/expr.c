@@ -100,7 +100,9 @@ static int make_token(char *e) {
       // e+pos:指向待匹配的字符串
       // 1:指定 pmatch 数组的大小，即可以存储多少个匹配结果.成员：
       // pmatch：pmatch[0].rm_so 和 pmatch[0].rm_eo 分别表示匹配子串的起始和结束位置。
-      if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
+      //if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
+      int regexec_ret = regexec(&re[i], e + position, 1, &pmatch, 0);
+      if(regexec_ret == 0 && pmatch.rm_so == 0){
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
@@ -118,10 +120,11 @@ static int make_token(char *e) {
           case TK_NOTYPE: break;//不记录space
           default:
             // 记录匹配的token：str，type
-            nr_token++;
+            // nr_token++;
             printf("i'll store this token\n");
-            memcpy(tokens[i].str, substr_start, substr_len);
-            tokens[i].type = rules[i].token_type;
+            memcpy(tokens[nr_token].str, substr_start, substr_len);
+            tokens[nr_token].type = rules[i].token_type;
+            nr_token++;
             break;
         }
 
