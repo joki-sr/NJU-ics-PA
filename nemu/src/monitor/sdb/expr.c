@@ -137,7 +137,7 @@ static int make_token(char *e) {
       return false;
     }
   }
-
+  printf("get %d tokens.\n",nr_token);
   return nr_token;
 }
 
