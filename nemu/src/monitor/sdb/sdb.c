@@ -149,8 +149,9 @@ static int cmd_p(char *args){
   if(args == NULL)return 0;
 
   bool success;
-  int ret = expr(args, &success);
-  return ret;
+  int val = expr(args, &success);
+  printf("expression value is : %d]n", val);
+  return 0;
 }
 
   

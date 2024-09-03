@@ -279,7 +279,7 @@ word_t expr(char *e, bool *success) {
 
   /* TODO: Insert codes to evaluate the expression. */
   // tokens[0:nrtoken]
-  uint32_t ans = 0;
-  ans = eval(0,nr_token-1);
-  return ans;
+  uint32_t val = 0;
+  val = eval(0,nr_token-1);
+  return val;
 }
