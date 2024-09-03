@@ -143,6 +143,15 @@ static int cmd_info(char *args){
   return 0;
 }
 
+static int cmd_p(char *args){
+  //char *arg = strtok(NULL, "");
+  if(args == NULL)return 0;
+
+  bool success;
+  int ret = expr(args, &success);
+  return ret;
+}
+
   
 // x 10 0x80000000
 // x N  guest_addr
@@ -183,7 +192,8 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "x", "Scan memory and print the value", cmd_x},
   { "si", "Execute N instructions and then stop, default: 1 step", cmd_si},
-  { "info", "r: regs / w: watching points", cmd_info}
+  { "info", "r: regs / w: watching points", cmd_info},
+  {"p", "print expr",cmd_p}
 
   /* TODO: Add more commands */
 
