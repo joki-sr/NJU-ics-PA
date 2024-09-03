@@ -142,11 +142,14 @@ static int make_token(char *e) {
   return nr_token;
 }
 
-// (...)
+// 判断表达式是否被一对匹配的括号包围着, 
+// 同时检查表达式的左右括号是否匹配
 bool check_parentheses(int p, int q){
   if( ! (tokens[p].type == TK_PAREN_OPEN && tokens[q].type == TK_PAREN_CLOSE) )
     return false;
-  
+  p++, q--;
+  if(p>q)assert(0);
+  //删去外边的括号，如果还能配对
   int sum = 0;
   for(int i=p;i<=q;i++){
     switch (tokens[i].type)
