@@ -154,6 +154,39 @@ static int cmd_p(char *args){
   return 0;
 }
 
+static int cmd_test(char *args){
+  FILE *fp = fopen("/home/joki/PA/ics2023/nemu/tools/gen-expr/input", "r");
+  if(fp == NULL){
+    perror("failed to open file");
+    return 0;
+  }
+
+  char line[65536 + 20];
+  int i = 1;
+  while(fgets(line, sizeof(line),fp) != NULL){
+    uint32_t expected_val,cal_val;
+    char e[65536];
+
+    //parse
+    if(sscanf(line, "%u %[^\n]", &expected_val, e) != 2){
+      fprintf(stderr, "Failed to parse line: %s", line);
+      continue;
+    }
+    //eval
+    bool success;
+    cal_val = expr(e, &success);
+    //cmp
+    if (expected_val != cal_val){
+      printf("Mismatch: Expected %u, got %u for expression \"%s\"\n",
+                   expected_val, cal_val, e);
+    }else{
+      printf("Match.Line[%d]\n",i);
+    }
+    i++;
+  }
+  return 0;
+}
+
   
 // x 10 0x80000000
 // x N  guest_addr
@@ -195,7 +228,8 @@ static struct {
   { "x", "Scan memory and print the value", cmd_x},
   { "si", "Execute N instructions and then stop, default: 1 step", cmd_si},
   { "info", "r: regs / w: watching points", cmd_info},
-  {"p", "print expr",cmd_p}
+  {"p", "print expr",cmd_p},
+  {"test", "test expr", cmd_test}
 
   /* TODO: Add more commands */
 

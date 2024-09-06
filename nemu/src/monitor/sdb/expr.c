@@ -270,8 +270,12 @@ static uint32_t eval(int p, int q){
       case TK_MINUS: return val1 - val2;
       case TK_MULTIPLY: return val1 * val2;
       case TK_DIVIDE: 
-        if(val2 == 0)assert(0);
-        return val1 / val2;
+        if(val2 == 0){
+          printf("invalid expr, divide 0.\n");
+          return UINT32_MAX;
+        }else{
+          return val1 / val2;
+        }
       default: assert(0);
   }
   }

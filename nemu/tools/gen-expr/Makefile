@@ -15,4 +15,5 @@
 
 NAME = gen-expr
 SRCS = gen-expr.c
+CFLAGS = -g -O0  # 添加 -g 以生成调试信息，-O0 以关闭优化
 include $(NEMU_HOME)/scripts/build.mk

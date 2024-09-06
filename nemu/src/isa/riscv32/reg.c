@@ -23,6 +23,7 @@ const char *regs[] = {
   "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"
 };
 
+// reg_name, reg_val(16), reg_val(10)
 void isa_reg_display() {
   int i;
   for(i = 0; i < 32; i++){
@@ -30,6 +31,15 @@ void isa_reg_display() {
   }
 }
 
+//用于返回名字为s的寄存器的值, 并设置success指示是否成功.
 word_t isa_reg_str2val(const char *s, bool *success) {
+  int i;
+  for(i=0;i<32;i++){
+    if(strcmp(regs[i], s) == 0){
+      *success = true;
+      return cpu.gpr[i];
+    }
+  }
+  *success = false;
   return 0;
 }
