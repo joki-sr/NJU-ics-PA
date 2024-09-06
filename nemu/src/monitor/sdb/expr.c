@@ -80,8 +80,8 @@ typedef struct token {
   int type;
   char str[32];
 } Token;
-
-static Token tokens[32] __attribute__((used)) = {};//不被优化；初始化默认值
+#define MAX_TOKENS
+static Token tokens[MAX_TOKENS] __attribute__((used)) = {};//不被优化；初始化默认值
 static int nr_token __attribute__((used))  = 0;//分析后得到的token数量
 
 //return number of tokens ,max: 32.
@@ -122,7 +122,7 @@ static int make_token(char *e) {
           default:
             // 记录匹配的token：str，type
             // nr_token++;
-            printf("i'll store this token\n");
+            // printf("i'll store this token\n");
             memcpy(tokens[nr_token].str, substr_start, substr_len);
             tokens[nr_token].type = rules[i].token_type;
             nr_token++;
