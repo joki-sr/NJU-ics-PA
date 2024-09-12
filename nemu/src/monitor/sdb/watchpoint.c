@@ -67,9 +67,22 @@ void wp_add(char *args){
   char *arg = strtok(NULL, " ");
   if(arg[0] == '$'){
     p->addr = NULL;
-    p->reg = arg;
+    p->reg = malloc(strlen(arg) +1);
+    if(p->reg != NULL){
+      strcpy(p->reg, arg);
+    }else{
+      printf("wp_add: cannot malloc.\n");
+      return;
+    }
   }else{
-    p->addr = arg;
+    //p->addr = *arg;
+    p->addr = malloc(strlen(arg) + 1);
+    if(p->addr!=NULL){
+      strcpy(p->addr, arg);
+    }else{
+      printf("wp_add: cannot malloc.\n");
+      return ;
+    }
     p->reg = NULL;
     printf("todo,wp_add()\n");
     return;
