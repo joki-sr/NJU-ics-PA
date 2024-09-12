@@ -80,6 +80,34 @@ static int cmd_c(char *args) {
   return 0;
 }
 
+// w $reg
+// w 0x..
+static int cmd_w(char *args) {
+  //char *arg = strtok(NULL, " ");
+  if(strlen(args) < 2)return 0;
+  wp_add(args);
+  // if(args[0] == "$"){
+  //   wp_newreg(args);
+  // }else{
+  //   wp_newaddr(args);
+  // }
+  //WP nwp = wp_new();
+  //todo
+  return 0;
+}
+
+static int cmd_d(char *args){
+  char *arg = strtok(NULL, " ");
+  int n;
+  if(arg == NULL )
+    return 0;
+  else{
+    n = str_to_int(arg);
+  }
+  wp_del(n);
+  return 0;
+}
+
 
 static int cmd_q(char *args) {
   printf("Quiting nemu...\n");
@@ -124,7 +152,7 @@ static int cmd_info_r() {
 }
 
 static int cmd_info_w() {
-  // todo
+  wp_display();
   return 0;
 }
 
@@ -228,8 +256,10 @@ static struct {
   { "x", "Scan memory and print the value", cmd_x},
   { "si", "Execute N instructions and then stop, default: 1 step", cmd_si},
   { "info", "r: regs / w: watching points", cmd_info},
-  {"p", "print expr",cmd_p},
-  {"test", "test expr", cmd_test}
+  { "p", "print expr",cmd_p},
+  {"test", "test expr", cmd_test},
+  { "w", "set watchpoint", cmd_w},
+  { "d", "delete watchpoint n",cmd_d}
 
   /* TODO: Add more commands */
 

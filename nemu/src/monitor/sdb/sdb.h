@@ -18,6 +18,29 @@
 
 #include <common.h>
 
+//expr.c
 word_t expr(char *e, bool *success);
+
+//watchpoint.c
+typedef struct watchpoint {
+  int NO;
+  struct watchpoint *next;
+
+  char *reg;//watch a reg
+  char *addr;//watch an addr
+  int enabled;  //启用/禁用
+
+  //size_t size;//观察点监视的数据大小
+  //char *expression;//条件表达式
+  //    int type;            // 观察点的类型（读、写、读写）
+
+} WP;
+WP* wp_new(void);
+// void wp_newreg(char*);
+// void wp_newaddr(char*);
+void wp_add(char*);
+void wp_clean(int);
+void wp_del(int);
+void wp_display(void);
 
 #endif
