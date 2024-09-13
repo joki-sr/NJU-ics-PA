@@ -62,6 +62,22 @@ void init_wp_pool() {
 //   return wp;
 // }
 
+void wp_debug(void){
+  WP *p = head;
+  printf("headList:");
+  while(p){
+    printf("%d ",p->NO);
+    p = p->next;
+  }
+  p = free_;
+  printf("free_:");
+  while(p){
+    printf("%d ",p->NO);
+    p = p->next;
+  }
+
+}
+
 void wp_add(char *args){
   //parse
   char *arg = strtok(NULL, " ");
@@ -90,16 +106,19 @@ void wp_add(char *args){
       strcpy(p->reg, arg);
     }else{
       printf("wp_add() cannot malloc.(1)\n");
+      return;
     }
   }else{
     p->reg = NULL;
     if( (p->addr = malloc(strlen(arg) + 1)) == NULL ){
       printf("wp_add() cannot malloc.(2)\n");
+      return;
     }else{
       strcpy(p->addr, arg);
     }
   }
   nr_wp ++;
+  wp_debug();
   return;
 }
 
@@ -148,11 +167,7 @@ void wp_del(int n){
   }
   if(pp==NULL){//找不到
     printf("Error: wp[%d] not in headList.\n",n);
-    WP *tmp = head;
-    while(tmp){
-      printf("%d\n",tmp->NO);
-      tmp = tmp->next;
-    }
+    wp_debug();
     return;
   }
 
@@ -173,6 +188,7 @@ void wp_del(int n){
     free_ = pp;
   }
   nr_wp --;
+  wp_debug();
   return;
 }
 
