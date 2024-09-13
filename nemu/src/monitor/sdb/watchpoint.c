@@ -16,7 +16,7 @@
 #include "sdb.h"
 
 #define NR_WP 32
-int nr_wp = 0;
+int nr_wp = 0;//已经添加的watchpoint数
 
 // typedef struct watchpoint {
 //   int NO;
@@ -49,48 +49,58 @@ void init_wp_pool() {
 
 /* TODO: Implement the functionality of watchpoint */
 
-WP* wp_new(void){
-  if(free_ == NULL){
-    printf("Too much watchpoints.\n");
-    return NULL;
-  }
-  WP *wp = free_;
-  free_ = wp->next;
-  wp->next = head;
-  head = wp;
-  nr_wp++;
-  return wp;
-}
+// WP* wp_new(void){
+//   if(free_ == NULL){
+//     printf("Too much watchpoints.\n");
+//     return NULL;
+//   }
+//   WP *wp = free_;
+//   free_ = wp->next;
+//   wp->next = head;
+//   head = wp;
+//   nr_wp++;
+//   return wp;
+// }
 
 void wp_add(char *args){
-  WP *p = wp_new();
+  //parse
   char *arg = strtok(NULL, " ");
+  //取free_
+  WP *p = NULL;
+  if(free_ == NULL){
+    printf("Cannot add. Too much watchpoints.\n");
+  }else{
+    p=free_;
+    free_ = free_->next;
+  }
+
+  //添加到head
+  if(head == NULL){
+    head = p;
+    p->next = NULL;
+  }else{
+    p->next = head;
+    head = p;
+  }
+  //补充wp信息
+  p->enabled = 1;
   if(arg[0] == '$'){
     p->addr = NULL;
-    p->reg = malloc(strlen(arg) +1);
-    if(p->reg != NULL){
+    if ( (p->reg = malloc(strlen(arg) + 1)) != NULL){
       strcpy(p->reg, arg);
     }else{
-      printf("wp_add: cannot malloc.\n");
-      return;
+      printf("wp_add() cannot malloc.(1)\n");
     }
   }else{
-    //p->addr = *arg;
-    p->addr = malloc(strlen(arg) + 1);
-    if(p->addr!=NULL){
-      strcpy(p->addr, arg);
-    }else{
-      printf("wp_add: cannot malloc.\n");
-      return ;
-    }
     p->reg = NULL;
-    printf("todo,wp_add()\n");
-    return;
+    if( (p->addr = malloc(strlen(arg) + 1)) == NULL ){
+      printf("wp_add() cannot malloc.(2)\n");
+    }else{
+      strcpy(p->addr, arg);
+    }
   }
-  
-  p->enabled = 1;
+  nr_wp ++;
   return;
-
 }
 
 // void wp_newreg(char *args){
@@ -109,8 +119,9 @@ void wp_add(char *args){
 // }
 
 //清空wp_pool[n]的NO之外的内容
-//wp_clean, wp_init调用
+//wp_del, wp_init调用
 void wp_clean(int n){
+  if(n < 0 || n > 31)return;
   WP *p = &wp_pool[n];
   p->reg = NULL;
   p->addr = NULL;
@@ -123,12 +134,10 @@ void wp_del(int n){
     printf("Error: n >  NR_WP\n ");
     return ;
   }
-  // wp_clean(n);
 
-  //找到head队列中的wp n
-  //p->pp(3)
-  //WP *p = head,*pp = p->next;
-  WP *p=NULL, *pp = head;
+  //找
+  //pp为找到的，p是pp前驱
+  WP *p=head, *pp = head;
   while(pp){
     if(pp->NO == n )break;
     else{
@@ -142,11 +151,23 @@ void wp_del(int n){
     return;
   }
 
-  p->next = pp->next;
-  pp->next = free_;
-  free_ = pp;
+  //删除
+  if(p!=NULL){//pp前有节点
+    p->next = pp->next;
+  }else{
+    head = pp->next;
+  }
+
+  //添加到free
   wp_clean(n);
-  nr_wp--;
+  if(free_==NULL){
+    free_ = pp;
+    pp->next = NULL;
+  }else{
+    pp->next = free_;
+    free_ = pp;
+  }
+  nr_wp --;
   return;
 }
 
