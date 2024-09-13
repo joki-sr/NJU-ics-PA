@@ -130,7 +130,7 @@ void wp_del(int n){
   //WP *p = head,*pp = p->next;
   WP *p=NULL, *pp = head;
   while(pp){
-    if(pp->NO ==3)break;
+    if(pp->NO == n )break;
     else{
       p = pp;
       pp = pp->next;
