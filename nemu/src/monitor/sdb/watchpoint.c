@@ -127,7 +127,8 @@ void wp_del(int n){
 
   //找到head队列中的wp n
   //p->pp(3)
-  WP *p = head,*pp = p->next;
+  //WP *p = head,*pp = p->next;
+  WP *p=NULL, *pp = head;
   while(pp){
     if(pp->NO ==3)break;
     else{
