@@ -148,6 +148,11 @@ void wp_del(int n){
   }
   if(pp==NULL){//找不到
     printf("Error: wp[%d] not in headList.\n",n);
+    WP *tmp = head;
+    while(tmp){
+      printf("%d\n",tmp->NO);
+      tmp = tmp->next;
+    }
     return;
   }
 
