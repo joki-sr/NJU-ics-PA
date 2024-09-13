@@ -156,7 +156,7 @@ void wp_del(int n){
 
   //找
   //pp为找到的，p是pp前驱
-  WP *p=head, *pp = head;
+  WP *p=NULL, *pp = head;
   while(pp){
     if(pp->NO == n )break;
     else{
@@ -172,7 +172,7 @@ void wp_del(int n){
   }
 
   //删除
-  if(p!=head){//pp前有节点
+  if(p!=NULL){//pp前有节点
     p->next = pp->next;
   }else{
     head = pp->next;
