@@ -70,12 +70,12 @@ void wp_debug(void){
     p = p->next;
   }
   p = free_;
-  printf("free_:");
+  printf("\nfree_:");
   while(p){
     printf("%d ",p->NO);
     p = p->next;
   }
-
+  printf("\n");
 }
 
 void wp_add(char *args){
