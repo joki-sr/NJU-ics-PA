@@ -172,7 +172,7 @@ void wp_del(int n){
   }
 
   //删除
-  if(p!=NULL){//pp前有节点
+  if(p!=head){//pp前有节点
     p->next = pp->next;
   }else{
     head = pp->next;
