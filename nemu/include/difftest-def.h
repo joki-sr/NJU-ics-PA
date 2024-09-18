@@ -37,8 +37,8 @@
         # error Unsupport ISA
     #endif
 
-    #ifndef CONFIG_DIFFTEST
-        #define CONFIG_DIFFTEST y
-    #endif
+    // #ifndef CONFIG_DIFFTEST
+    //     #define CONFIG_DIFFTEST y
+    // #endif
 
 #endif
