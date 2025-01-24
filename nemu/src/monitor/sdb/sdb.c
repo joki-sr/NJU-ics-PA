@@ -257,7 +257,7 @@ static struct {
   { "si", "Execute N instructions and then stop, default: 1 step", cmd_si},
   { "info", "r: regs / w: watching points", cmd_info},
   { "p", "print expr",cmd_p},
-  {"test", "test expr", cmd_test},
+  { "test", "test expr", cmd_test},
   { "w", "set watchpoint", cmd_w},
   { "d", "delete watchpoint n",cmd_d}
 
