@@ -25,6 +25,7 @@ enum token_types{
   TK_NOTYPE = 256, //SPACE 
   TK_EQ, TK_INTEGER, TK_PLUS, TK_MINUS, TK_MULTIPLY, TK_DIVIDE,// =+-*/ 
   TK_PAREN_OPEN, TK_PAREN_CLOSE, //()
+  TK_REG,
   /* TODO: Add more token types */
 
 };
@@ -49,7 +50,8 @@ static struct rule {
   {"/",TK_DIVIDE},          // 除号
   {"\\(",TK_PAREN_OPEN},        // 左括号
   {"\\)",TK_PAREN_CLOSE},        // 右括号
-  {"[ \t\n]+",TK_NOTYPE}    // 空格串（包含空格、制表符和换行符）
+  {"[ \t\n]+",TK_NOTYPE},   // 空格串（包含空格、制表符和换行符）
+  {"^$[a-zA-Z0-9]+",TK_REG}, //$eax
 };
 
 // number of rules[]
@@ -208,13 +210,25 @@ static uint32_t eval(int p, int q){
      * Return the value of the number.
      */
     char *end;
-    unsigned long ul = strtoul(tokens[p].str, &end, 10);
-    if(*end != '\0'){
-      printf("error: eval() p == q, conversion error, wrong format of tokens[%d]:str=%s, type = %d.\n", p, tokens[p].str,tokens[p].type);
-      ret = UINT32_MAX;
-    }else{
-      ret = (uint32_t)ul;
+    char *token = tokens[p].str;
+
+    if(token[0] == '$') {// is reg
+      bool succ = 1;
+      ret = (uint32_t)isa_reg_str2val(token+1, &succ);// 0, eax
+      if(!succ){
+        printf("error: eval() p==q, conversion error. succ = 0");
+        ret = UINT32_MAX;
+      }
+    } else {  //is num
+      unsigned long ul = strtoul(tokens[p].str, &end, 10);
+      if(*end != '\0'){
+        printf("error: eval() p == q, conversion error, wrong format of tokens[%d]:str=%s, type = %d.\n", p, tokens[p].str,tokens[p].type);
+        ret = UINT32_MAX;
+      }else{
+        ret = (uint32_t)ul;
+      }
     }
+
   // p < q && ...
   }else if (check_parentheses(p, q) == true) {
     /* The expression is surrounded by a matched pair of parentheses.

@@ -34,7 +34,12 @@ void isa_reg_display() {
 //用于返回名字为s的寄存器的值, 并设置success指示是否成功.
 word_t isa_reg_str2val(const char *s, bool *success) {
   int i;
-  for(i=0;i<32;i++){
+  if(s[0] == '0'){
+    *success = true;
+    return cpu.gpr[0];
+  }
+
+  for(i=1;i<32;i++){
     if(strcmp(regs[i], s) == 0){
       *success = true;
       return cpu.gpr[i];
