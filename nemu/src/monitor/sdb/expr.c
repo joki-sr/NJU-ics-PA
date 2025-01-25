@@ -272,6 +272,8 @@ static uint32_t eval(int p, int q){
         flag = 1;
       case TK_INTEGER:
         break;
+      case TK_REG:
+        break;
       default:
         assert(0);
         break;
