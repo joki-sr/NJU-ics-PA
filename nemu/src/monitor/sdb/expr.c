@@ -51,7 +51,8 @@ static struct rule {
   {"\\(",TK_PAREN_OPEN},        // 左括号
   {"\\)",TK_PAREN_CLOSE},        // 右括号
   {"[ \t\n]+",TK_NOTYPE},   // 空格串（包含空格、制表符和换行符）
-  {"^$[a-zA-Z0-9]+",TK_REG}, //$eax
+  // {"^$[a-zA-Z0-9]+",TK_REG}, //$eax
+  {"^\\$[a-zA-Z0-9]+",TK_REG}, //$eax
 };
 
 // number of rules[]
