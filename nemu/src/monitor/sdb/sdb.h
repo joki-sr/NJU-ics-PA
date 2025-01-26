@@ -35,7 +35,9 @@ typedef struct watchpoint {
   //    int type;            // 观察点的类型（读、写、读写）
 
 } WP;
-WP* wp_new(void);
+WP* new_wp(void);
+void free_wp(WP *wp);
+
 // void wp_newreg(char*);
 // void wp_newaddr(char*);
 void wp_add(char*);
