@@ -71,6 +71,7 @@ int isa_exec_once(Decode *s) {
   // IF:
   // PC->IR, PC+1->PC
   s->isa.inst.val = inst_fetch(&s->snpc, 4);
+  // what
   // ID:
   return decode_exec(s);
 }
