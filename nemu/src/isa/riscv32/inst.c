@@ -33,6 +33,8 @@ enum {
 #define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
 
+// 据传入的指令类型type来进行操作数的译码, 译码结果将记录到函数参数rd, src1, src2和imm中, 
+// 它们分别代表目的操作数的寄存器号码, 两个源操作数和立即数.
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type) {
   uint32_t i = s->isa.inst.val;
   int rs1 = BITS(i, 19, 15);
@@ -62,6 +64,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 000 ????? 01000 11", sb     , S, Mw(src1 + imm, 1, src2));
 
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
+   // 前面所有的模式匹配规则都无法成功匹配, 该指令视为非法指令inv
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
   INSTPAT_END();
 
