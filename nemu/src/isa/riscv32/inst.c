@@ -25,6 +25,7 @@
 enum {
   TYPE_I, TYPE_U, TYPE_S,
   TYPE_N, // none
+  TYPE_JAL,
 };
 
 #define src1R() do { *src1 = R(rs1); } while (0)
@@ -32,6 +33,7 @@ enum {
 #define immI() do { *imm = SEXT(BITS(i, 31, 20), 12); } while(0)
 #define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
+#define immJAL() do { *imm = BITS(i, 20, 20) | BITS(i, 10, 1) | BITS(i, 11, 11) | BITS(i, 19, 12); } while (0)
 
 // 据传入的指令类型type来进行操作数的译码, 译码结果将记录到函数参数rd, src1, src2和imm中, 
 // 它们分别代表目的操作数的寄存器号码, 两个源操作数和立即数.
@@ -44,6 +46,7 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
     case TYPE_I: src1R();          immI(); break;
     case TYPE_U:                   immU(); break;
     case TYPE_S: src1R(); src2R(); immS(); break;
+    case TYPE_JAL:               immJAL(); break;
   }
 }
 
@@ -57,13 +60,23 @@ static int decode_exec(Decode *s) {
   decode_operand(s, &rd, &src1, &src2, &imm, concat(TYPE_, type)); \
   __VA_ARGS__ ; \
 }
-
+//U
   INSTPAT_START();
   INSTPAT("??????? ????? ????? ??? ????? 00101 11", auipc  , U, R(rd) = s->pc + imm);
-  
+//I
   INSTPAT("??????? ????? ????? 100 ????? 00000 11", lbu    , I, R(rd) = Mr(src1 + imm, 1));
   INSTPAT("???????????? ????? 000 ????? 0010011",   addi   , I, R(rd) = R(src1) + imm);
+  INSTPAT("000000000001 00000 000 00000 1110011",   ebreak , I, /*throw breakpoint exception*/);
+//S
   INSTPAT("??????? ????? ????? 000 ????? 01000 11", sb     , S, Mw(src1 + imm, 1, src2));
+  INSTPAT("??????? ????? ????? 010 ????? 01000 11", sw     , S, Mw(src1 + imm, 4, src2)); // store 1word=4bytes
+//J
+  INSTPAT("???????????? ???????? ????? 1101111"   , jal    , JAL, R(rd) = s->pc + 4, s->pc += imm);
+  
+  // Pseudo
+  // li = addi // INSTPAT("?????????? ?????????? ????? 0110111", li_lui, U, R(rd) = imm);
+  // mv = addi // OK.
+  // j = jal // OK.
 
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
    // 前面所有的模式匹配规则都无法成功匹配, 该指令视为非法指令inv
