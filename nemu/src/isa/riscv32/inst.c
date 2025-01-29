@@ -33,7 +33,7 @@ enum {
 #define immI() do { *imm = SEXT(BITS(i, 31, 20), 12); } while(0)
 #define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
-#define immJAL() do { *imm = BITS(i, 20, 20) | BITS(i, 10, 1) | BITS(i, 11, 11) | BITS(i, 19, 12) | 0;printf("immJAL:%d\n", *imm); } while (0)
+#define immJAL() do { printf("immJAL:%d\n", *imm); *imm = BITS(i, 20, 20) | BITS(i, 10, 1) | BITS(i, 11, 11) | BITS(i, 19, 12) | 0;printf("immJAL:%d\n", *imm); } while (0)
 
 // 据传入的指令类型type来进行操作数的译码, 译码结果将记录到函数参数rd, src1, src2和imm中, 
 // 它们分别代表目的操作数的寄存器号码, 两个源操作数和立即数.
