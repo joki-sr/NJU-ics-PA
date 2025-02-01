@@ -38,15 +38,14 @@ enum {
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
 #define immJ() do { \
 *imm = SEXT(BITS(i,30,30), 1) << 20 |\
-BITS(i, 19, 12) << 12 |\
-BITS(i, 20, 20) << 11 |\
-BITS(i, 30, 21) << 1;} while (0)
-// #define immB() do { *imm = SEXT(BITS(i,31,31),1) << 12 | SEXT(BITS(i,7,7),1) << 11 | SEXT(BITS(i,30,25),6) << 5 | SEXT(BITS(i,11,8),4) << 1;printf("immB=%d\n",*imm); } while(0)
+        BITS(i, 19, 12) << 12 |\
+        BITS(i, 20, 20) << 11 |\
+        BITS(i, 30, 21) << 1;} while (0)
 #define immB() do { \
-*imm = SEXT(BITS(i,31,31),1) << 12; printf("immB1=%x\n",*imm); \
-*imm |= BITS(i,7,7) << 11 ;printf("immB2=%x\n",*imm);\
-*imm |= BITS(i,30,25) << 5 ;printf("immB3=%x\n",*imm);\
-*imm |= BITS(i,11,8) << 1;printf("immB4=%x\n",*imm); } while(0)
+      *imm = SEXT(BITS(i,31,31),1) << 12 |\
+      BITS(i,7,7) << 11 |\
+      BITS(i,30,25) << 5 |\
+      BITS(i,11,8) << 1;  } while(0)
 
 // 据传入的指令类型type来进行操作数的译码, 译码结果将记录到函数参数rd, src1, src2和imm中, 
 // 它们分别代表目的操作数的寄存器号码, 两个源操作数和立即数.
