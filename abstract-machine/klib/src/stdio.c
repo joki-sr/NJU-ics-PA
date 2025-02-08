@@ -50,7 +50,7 @@ int sprintf(char *out, const char *fmt, ...) {
         // %d
         int n = va_arg(va, int);
         // printf("sprintf:n=%d\n",n);
-        assert(n==-115);
+        assert(n==-15);
         itoa(n, out+strlen(out), 10);
         // printf("sprintf:out=%s", *out);
       }else assert(0);
