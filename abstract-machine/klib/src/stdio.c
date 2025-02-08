@@ -5,26 +5,31 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
-void itoa(int num, char *str, int base){
+void itoa(int num, char *str, int base) {
   int is_neg = (num < 0);
   int str_idx = 0;
-  char tmp[256];
+  char tmp[12];  // 足够存放 int (-2147483648)
   int tmp_idx = 0;
 
-  if(is_neg){
-    str[str_idx++] = '-';
+  if (is_neg) {
     num = -num;
   }
 
-  while(num > 0){
-    tmp[tmp_idx++] = num % base;
+  do {
+    tmp[tmp_idx++] = (num % base) + '0';  // **转换成字符**
     num /= base;
+  } while (num > 0);
+
+  if (is_neg) {
+    tmp[tmp_idx++] = '-';  // 负数补上 `-`
   }
-  //reverse
-  while(tmp_idx>0){
-    tmp_idx --;
-    str[str_idx++] = tmp[tmp_idx];
+
+  // 反转字符串
+  while (tmp_idx > 0) {
+    str[str_idx++] = tmp[--tmp_idx];
   }
+
+  str[str_idx] = '\0';  // **确保字符串结尾**
 }
 
 int printf(const char *fmt, ...) {
@@ -35,30 +40,38 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
   panic("Not implemented");
 }
 
+// return out lenth
 int sprintf(char *out, const char *fmt, ...) {
   va_list va;
   va_start(va, fmt);
-  size_t i = 0;
+  size_t i = 0, out_idx = 0;
 
   for(i=0;fmt[i] != '\0';i++){
     if(fmt[i]=='%'){
       i++;
       if(fmt[i]=='s'){
         // %s
-        strcat(out, va_arg(va,char*));
+        // strcat(out, va_arg(va,char*)); don't use this
+        char *s = va_arg(va, char*);
+        size_t len = strlen(s);
+        memcpy(out + out_idx, s, len);// 使用 memcpy() 避免 strcat() 可能的越界访问。
       }else if(fmt[i]=='d'){
         // %d
         int n = va_arg(va, int);
-        // printf("sprintf:n=%d\n",n);
-        assert(n==-15);
-        itoa(n, out+strlen(out), 10);
-        // printf("sprintf:out=%s", *out);
+        char num_str[12];
+        itoa(n, num_str, 10);
+        size_t len = strlen(num_str);
+        memcpy(out + out_idx, num_str, len);
       }else assert(0);
     }else{
-      strcat(out, fmt + i);
+      // strcat(out, fmt + i); don't use this
+      out[out_idx++] = fmt[i];
     }
   }
-  return 0;
+
+  out[out_idx] = '\0'; // 确保字符串正确终止
+  va_end(va);
+  return out_idx;
 }
 
 int snprintf(char *out, size_t n, const char *fmt, ...) {
