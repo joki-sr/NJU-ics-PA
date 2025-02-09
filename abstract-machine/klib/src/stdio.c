@@ -55,6 +55,7 @@ int sprintf(char *out, const char *fmt, ...) {
         char *s = va_arg(va, char*);
         size_t len = strlen(s);
         memcpy(out + out_idx, s, len);// 使用 memcpy() 避免 strcat() 可能的越界访问。
+        out_idx+=len;
       }else if(fmt[i]=='d'){
         // %d
         int n = va_arg(va, int);
@@ -62,6 +63,7 @@ int sprintf(char *out, const char *fmt, ...) {
         itoa(n, num_str, 10);
         size_t len = strlen(num_str);
         memcpy(out + out_idx, num_str, len);
+        out_idx += len;
       }else assert(0);
     }else{
       // strcat(out, fmt + i); don't use this
