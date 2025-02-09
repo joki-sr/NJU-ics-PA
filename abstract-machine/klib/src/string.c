@@ -55,8 +55,11 @@ char *strcat(char *dst, const char *src) {
 }
 
 int strcmp(const char *s1, const char *s2) {
+  panic("Not implemented");
   size_t i = 0;
-printf("strcmp:[%s]and[%s]\n", *s1, *s2);
+// printf("strcmp:[%s]and[%s]\n", *s1, *s2);
+  // putstr(*s1);
+  // putstr(*s2);
   for(;s1[i] && s2[i];i++){
     if(s1[i] > s2[i])
       return 1;
