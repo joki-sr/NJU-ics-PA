@@ -91,7 +91,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   //~~~~~~~~~
   printf("before: IRING[%d]:%s\n", iring_idx,iring[iring_idx]);
 
-  disassemble(p_iring, 50, //iring[iring_idx] + IRING_LEN - p_iring, 
+  disassemble(p_iring, 20, //iring[iring_idx] + IRING_LEN - p_iring, 
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
   //~~~~~~~~~
   printf("disasm: IRING[%d]:%s\n", iring_idx,iring[iring_idx]);
