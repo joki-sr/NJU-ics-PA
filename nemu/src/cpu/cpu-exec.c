@@ -41,7 +41,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 }
 
 #define IRING_SUM 16
-#define IRING_LEN 80
+#define IRING_LEN 64
 char iring[IRING_SUM][IRING_LEN] = {};
 char *p_iring = iring[0];
 int iring_idx = 0;
@@ -93,7 +93,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   disassemble(p_iring, iring[iring_idx] + IRING_LEN - p_iring, 
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
   //~~~~~~~~~
-  printf("IRING[%d]:%s\n", iring_idx,iring[iring_idx]);
+  // printf("IRING[%d]:%s\n", iring_idx,iring[iring_idx]);
 #else
   p[0] = '\0'; // the upstream llvm does not support loongarch32r
 #endif
