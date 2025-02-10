@@ -78,6 +78,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   memset(p, ' ', space_len);
   p += space_len;
   //~~~~~~~~~
+  memset(p_iring, ' ', space_len);
   p_iring += space_len;
   //~~~~~~~~~
 
@@ -89,13 +90,10 @@ static void exec_once(Decode *s, vaddr_t pc) {
       //x86 使用 s->snpc 作为 PC 地址（可能是下一条指令地址）；其他架构（如 RISC-V）使用 s->pc
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
   //~~~~~~~~~
-  printf("before: IRING[%d]:%s\n", iring_idx,iring[iring_idx]);
-
-  disassemble(iring[++iring_idx], 20, //iring[iring_idx] + IRING_LEN - p_iring, 
+  disassemble(p_iring, iring[iring_idx] + IRING_LEN - p_iring, 
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
   //~~~~~~~~~
-  printf("disasm: IRING[%d]:%s %s", iring_idx,iring[iring_idx-1],iring[iring_idx]);
-  // printf("iring - pring = %ld\n", iring[iring_idx] - p_iring);
+  printf("disasm: IRING[%d]:%s\n", iring_idx,iring[iring_idx]);
 #else
   p[0] = '\0'; // the upstream llvm does not support loongarch32r
 #endif
