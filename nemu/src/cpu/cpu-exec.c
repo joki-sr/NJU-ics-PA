@@ -93,7 +93,7 @@ printf("spacelen: IRING[%d]:%s\n", iring_idx-1,iring[iring_idx]);
   //~~~~~~~~~
   printf("before: IRING[%d]:%s\n", iring_idx-1,iring[iring_idx]);
 
-  disassemble(p_iring, iring[iring_idx] + IRING_LEN - p_iring, 
+  disassemble(p_iring, 50, //iring[iring_idx] + IRING_LEN - p_iring, 
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
   //~~~~~~~~~
   printf("disasm: IRING[%d]:%s\n", iring_idx-1,iring[iring_idx]);
