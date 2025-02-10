@@ -31,6 +31,7 @@ static uint64_t g_timer = 0; // unit: us
 static bool g_print_step = false;
 
 void device_update();
+int itrace();
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE_COND
@@ -149,11 +150,27 @@ void cpu_exec(uint64_t n) {
 
     case NEMU_END: case NEMU_ABORT:
       Log("nemu: %s at pc = " FMT_WORD,
-          (nemu_state.state == NEMU_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) :
-           (nemu_state.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) :
-            ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED))),
+          (nemu_state.state == NEMU_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) : // 如果 nemu_state.state == NEMU_ABORT，打印 ABORT（红色），表示异常终止
+           (nemu_state.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : // 程序成功结束
+            ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED))),    // 程序非成功结束
           nemu_state.halt_pc);
+      if(nemu_state.state == NEMU_ABORT || nemu_state.halt_ret != 0){
+        itrace();
+      }
       // fall through
     case NEMU_QUIT: statistic();
   }
+}
+
+int itrace(void){
+  printf("itrace:\n");
+  for(int i=0;i<IRING_SUM;i++){
+    if(i==iring_idx){
+      printf("--> ");
+    }else{
+      printf("    ");
+    }
+    printf("%s\n", iring[i]);
+  }
+  return 0;
 }

@@ -24,6 +24,7 @@ static int is_batch_mode = false;
 
 void init_regex();
 void init_wp_pool();
+int itrace();
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -243,6 +244,10 @@ static int cmd_x(char *args) {
   return 0;
 }
 
+static int cmd_itrace(char *args){
+  return itrace();
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -259,7 +264,8 @@ static struct {
   { "p", "print expr",cmd_p},
   { "test", "test expr", cmd_test},
   { "w", "set watchpoint", cmd_w},
-  { "d", "delete watchpoint n",cmd_d}
+  { "d", "delete watchpoint n",cmd_d},
+  { "itrace", "trace instructions", cmd_itrace },
 
   /* TODO: Add more commands */
 
