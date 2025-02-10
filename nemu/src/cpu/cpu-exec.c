@@ -79,8 +79,6 @@ static void exec_once(Decode *s, vaddr_t pc) {
   p += space_len;
   //~~~~~~~~~
   p_iring += space_len;
-printf("spacelen: IRING[%d]:%s\n", iring_idx-1,iring[iring_idx]);
-
   //~~~~~~~~~
 
 #ifndef CONFIG_ISA_loongarch32r
@@ -93,7 +91,7 @@ printf("spacelen: IRING[%d]:%s\n", iring_idx-1,iring[iring_idx]);
   //~~~~~~~~~
   printf("before: IRING[%d]:%s\n", iring_idx-1,iring[iring_idx]);
 
-  disassemble(iring[iring_idx], 50, //iring[iring_idx] + IRING_LEN - p_iring, 
+  disassemble(p_iring, 50, //iring[iring_idx] + IRING_LEN - p_iring, 
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
   //~~~~~~~~~
   printf("disasm: IRING[%d]:%s\n", iring_idx,iring[iring_idx]);

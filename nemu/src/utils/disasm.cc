@@ -91,7 +91,15 @@ extern "C" void init_disasm(const char *triple) {
   if (isa == "riscv32" || isa == "riscv64")
     gIP->applyTargetSpecificCLOption("no-aliases");
 }
-
+/**
+ * @brief 反汇编机器码并返回对应的汇编指令字符串
+ * 
+ * @param str  存储反汇编结果的字符串缓冲区（输出）
+ * @param size str 的最大长度，防止溢出
+ * @param pc   指令的程序计数器（PC 地址）
+ * @param code 指向待反汇编的机器码数组（输入）
+ * @param nbyte 机器码的字节数（指令长度）
+ */
 extern "C" void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte) {
   MCInst inst;
   llvm::ArrayRef<uint8_t> arr(code, nbyte);
