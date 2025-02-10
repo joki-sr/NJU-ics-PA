@@ -87,9 +87,9 @@ printf("spacelen: IRING[%d]:%s\n", iring_idx-1,iring[iring_idx]);
   // 将机器码转换回汇编指令 并存入 logbuf
   // 0x80000000: ef be ad de   add r1, r2, r3
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
-  disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
-      //x86 使用 s->snpc 作为 PC 地址（可能是下一条指令地址）；其他架构（如 RISC-V）使用 s->pc
-      MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
+  // disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
+  //     //x86 使用 s->snpc 作为 PC 地址（可能是下一条指令地址）；其他架构（如 RISC-V）使用 s->pc
+  //     MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
   //~~~~~~~~~
   printf("before: IRING[%d]:%s\n", iring_idx-1,iring[iring_idx]);
 
