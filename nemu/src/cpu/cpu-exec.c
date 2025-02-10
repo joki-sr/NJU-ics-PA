@@ -165,6 +165,8 @@ void cpu_exec(uint64_t n) {
 int itrace(void){
   printf("itrace:\n");
   for(int i=0;i<IRING_SUM;i++){
+    if(iring[i][0]=='\0')
+      break;
     if(i==iring_idx){
       printf("--> ");
     }else{
