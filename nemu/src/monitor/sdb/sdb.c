@@ -25,6 +25,7 @@ static int is_batch_mode = false;
 void init_regex();
 void init_wp_pool();
 int itrace();
+int mtrace();
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -248,6 +249,10 @@ static int cmd_itrace(char *args){
   return itrace();
 }
 
+static int cmd_mtrace(char *args){
+  return mtrace();
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -266,6 +271,7 @@ static struct {
   { "w", "set watchpoint", cmd_w},
   { "d", "delete watchpoint n",cmd_d},
   { "itrace", "trace instructions", cmd_itrace },
+  { "mtrace", "trace memory r/w, output format:[addr: data]", cmd_mtrace},
 
   /* TODO: Add more commands */
 
