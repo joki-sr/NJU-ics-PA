@@ -40,6 +40,12 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
 }
 
+#define IRING_SUM 16
+#define IRING_LEN 80
+char iring[IRING_SUM][IRING_LEN] = {};
+char *p_iring = iring[0];
+int iring_idx = 0;
+
 // 让CPU执行当前PC指向的一条指令, 然后更新PC.
 static void exec_once(Decode *s, vaddr_t pc) {
   s->pc = pc;
@@ -47,25 +53,45 @@ static void exec_once(Decode *s, vaddr_t pc) {
   isa_exec_once(s);
   cpu.pc = s->dnpc;
 #ifdef CONFIG_ITRACE
-  char *p = s->logbuf;
+  char *p = s->logbuf; // 用于存储日志的缓冲区指针
+  // 0x80000000:
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
-  int ilen = s->snpc - s->pc;
+//~~~~~~~~~~~~
+  iring_idx = (iring_idx + 1) % IRING_SUM; 
+  p_iring = iring[iring_idx];
+  p_iring += snprintf(p_iring, IRING_LEN, FMT_WORD ":", s->pc);
+//~~~~~~~~~~~~
+  int ilen = s->snpc - s->pc; // 指令长度 x86变长
   int i;
-  uint8_t *inst = (uint8_t *)&s->isa.inst.val;
-  for (i = ilen - 1; i >= 0; i --) {
-    p += snprintf(p, 4, " %02x", inst[i]);
+  uint8_t *inst = (uint8_t *)&s->isa.inst.val; // 指令机器码
+  // logbuf 0x80000000: ef be ad de
+  for (i = ilen - 1; i >= 0; i --) {  // 机器码是 小端序存储（低字节在低地址），所以这里 逆序输出。
+    p += snprintf(p, 4, " %02x", inst[i]); // 指令的机器码以十六进制格式存入 
+    //~~~~~~~~~
+    p_iring += snprintf(p_iring, 4, " %02x", inst[i]);
+    //~~~~~~~~~
   }
-  int ilen_max = MUXDEF(CONFIG_ISA_x86, 8, 4);
-  int space_len = ilen_max - ilen;
+  int ilen_max = MUXDEF(CONFIG_ISA_x86, 8, 4); // ？A：B // 如果是 x86，则最大指令长度 ilen_max = 8 
+  int space_len = ilen_max - ilen;  // 计算 剩余空格，确保不同长度的指令在日志对齐：
   if (space_len < 0) space_len = 0;
   space_len = space_len * 3 + 1;
   memset(p, ' ', space_len);
   p += space_len;
+  //~~~~~~~~~
+  p_iring += space_len;
+  //~~~~~~~~~
 
 #ifndef CONFIG_ISA_loongarch32r
+  // 将机器码转换回汇编指令 并存入 logbuf
+  // 0x80000000: ef be ad de   add r1, r2, r3
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
+      //x86 使用 s->snpc 作为 PC 地址（可能是下一条指令地址）；其他架构（如 RISC-V）使用 s->pc
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
+  //~~~~~~~~~
+  disassemble(p_iring, iring[iring_idx] + IRING_LEN - p_iring, 
+      MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
+  //~~~~~~~~~
 #else
   p[0] = '\0'; // the upstream llvm does not support loongarch32r
 #endif

@@ -26,4 +26,12 @@ void invalid_inst(vaddr_t thispc);
 #define NEMUTRAP(thispc, code) set_nemu_state(NEMU_END, thispc, code)
 #define INV(thispc) invalid_inst(thispc)
 
+// //~~~~~~~~~~~~IRING~~~~~~~~~~~~~~~
+// #define IRING_SUM 16
+// #define IRING_LEN 80
+// char iring[IRING_SUM][IRING_LEN] = {};
+// char *p_iring = iring[0];
+// int iring_idx = 0;
+
+
 #endif
