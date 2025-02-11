@@ -151,6 +151,38 @@ config ITRACE_COND
   string "Only trace instructions when the condition is true"
   default "true"
 
+  # MCONFIG
+config MTRACE
+  bool "Enable memory access tracer"
+  default n
+  help
+    This option enables memory access tracing, which tracks all memory read and write
+    operations. By default, this feature is disabled and must be manually enabled.
+
+config MTRACE_START
+  depends on MTRACE
+  int "When memory access tracing starts (unit: number of instructions)"
+  default 0
+  help
+    Specify the instruction count at which memory access tracing begins.
+    The default value is 0, meaning tracing starts immediately.
+
+config MTRACE_END
+  depends on MTRACE
+  int "When memory access tracing stops (unit: number of instructions)"
+  default 10000
+  help
+    Specify the instruction count at which memory access tracing stops.
+    The default value is 10000, meaning tracing will stop after 10,000 instructions.
+
+config MTRACE_COND
+  depends on MTRACE
+  string "Only trace memory access when the condition is true"
+  default "true"
+  help
+    This condition defines when memory access tracing should be active.
+    The default value is "true", meaning memory access tracing will be enabled at all times.
+# MCONFIG end.
 
 config DIFFTEST
   depends on TARGET_NATIVE_ELF

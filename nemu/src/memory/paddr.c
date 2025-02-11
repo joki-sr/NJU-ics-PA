@@ -99,6 +99,7 @@ int mtrace(void){
     }
     printf("%x: %x", mring[i].addr, mring[i].value);
   }
+  return 0;
 #endif
 }
 
