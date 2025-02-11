@@ -2,9 +2,8 @@
 
 // ----------- mtrace -----------
 
-extern MtraceEntry mring[MRING_SUM];
-
-int mring_idx = 0;
+MtraceEntry mring[MRING_SUM];
+int mring_idx =0;
 
 void mtrace_add(paddr_t addr, int len, word_t data){
   mring_idx = (mring_idx + 1) % MRING_SUM;
@@ -28,4 +27,28 @@ int mtrace(void){
   }
   return 0;
 #endif
+}
+
+
+// 
+char iring[IRING_SUM][IRING_LEN] = {};
+int iring_idx =0;
+
+void itrace_add(char *str){
+  iring_idx = (iring_idx + 1) % IRING_SUM;
+  // iring[iring_idx] = *str;
+  memcpy(iring[iring_idx], str, IRING_LEN);
+}
+
+int itrace(void){
+  printf("itrace:\n");
+  for(int i=0;i<IRING_SUM;i++){
+    if(i==iring_idx){
+      printf("--> ");
+    }else{
+      printf("    ");
+    }
+    printf("%s\n", iring[i]);
+  }
+  return 0;
 }
