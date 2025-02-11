@@ -18,6 +18,11 @@
 
 #include <common.h>
 
+// ----------- trace -----------
+int mtrace(void);
+void mtrace_add(paddr_t, int, word_t);
+int itrace(void);
+
 // ----------- state -----------
 
 enum { NEMU_RUNNING, NEMU_STOP, NEMU_END, NEMU_ABORT, NEMU_QUIT };
