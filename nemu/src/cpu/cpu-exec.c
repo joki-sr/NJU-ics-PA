@@ -95,6 +95,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
   //~~~~~~~~~
   // printf("IRING[%d]:%s\n", iring_idx,iring[iring_idx]);
+  printf("logbuf:%s\n", s->logbuf);
 #else
   p[0] = '\0'; // the upstream llvm does not support loongarch32r
 #endif
