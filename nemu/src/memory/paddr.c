@@ -98,7 +98,7 @@ int mtrace(void){
     }else{
       printf("    ");
     }
-    printf("0x%x: 0x%08x signed:%012d unsigned:%u\n",
+    printf("0x%08x: 0x%08x signed:% 12d unsigned:%u\n",
             mring[i].addr, mring[i].value, mring[i].value,(unsigned int)mring[i].value);
   }
   return 0;
