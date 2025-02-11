@@ -91,14 +91,15 @@ int mtrace(void){
   printf("macro CONFIG_MTRACE is not configured.\n");
   return 0;
 #else
-  printf("addr:data");
+  printf("addr:data\n");
   for(int i=0;i<MRING_SUM;i++){
     if(mring_idx == i){
       printf("--> ");
     }else{
       printf("    ");
     }
-    printf("0x%x: 0x%08x(%d)\n", mring[i].addr, mring[i].value, mring[i].value);
+    printf("0x%x: 0x%08x signed:%d unsigned:%u\n",
+            mring[i].addr, mring[i].value, mring[i].value,(unsigned int)mring[i].value);
   }
   return 0;
 #endif
