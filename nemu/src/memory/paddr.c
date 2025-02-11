@@ -98,7 +98,7 @@ int mtrace(void){
     }else{
       printf("    ");
     }
-    printf("%x: %x\n", mring[i].addr, mring[i].value);
+    printf("0x%x: 0x%08x(%d)\n", mring[i].addr, mring[i].value, mring[i].value);
   }
   return 0;
 #endif
