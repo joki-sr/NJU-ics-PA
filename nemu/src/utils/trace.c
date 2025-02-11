@@ -1,31 +1,13 @@
 #include <utils.h>
 
-//~~~~~~mtrace
-#define MRING_SUM 16
-#define MRING_LEN 32
+// ----------- mtrace -----------
 
-typedef struct {
-  paddr_t addr;
-  word_t value;
-} MtraceEntry;
-MtraceEntry mring[MRING_SUM];
+extern MtraceEntry mring[MRING_SUM];
 
 int mring_idx = 0;
-//~~~~~~mtrace
 
 void mtrace_add(paddr_t addr, int len, word_t data){
   mring_idx = (mring_idx + 1) % MRING_SUM;
-  // p_mring = mring[mring_idx];
-  // p_mring += snprintf(p_mring, 10, FMT_WORD ": ", addr);
-  // word_t value = 0;
-  // switch (len)
-  // {
-  //   case 1: value = *(uint8_t  *)data; break;
-  //   case 2: value = *(uint16_t *)data; break;
-  //   case 4: value = *(uint32_t *)data; break;
-  //   IFDEF(CONFIG_ISA64, case 8: value = *(uint64_t *)data; break);
-  //   default: MUXDEF(CONFIG_RT_CHECK, assert(0), return 0);
-  // }
   mring[mring_idx].addr = addr;
   mring[mring_idx].value = data;
 }

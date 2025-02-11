@@ -19,8 +19,17 @@
 #include <common.h>
 
 // ----------- trace -----------
+#define MRING_SUM 16
+#define MRING_LEN 32
+
 int mtrace(void);
 void mtrace_add(paddr_t, int, word_t);
+typedef struct {
+  paddr_t addr;
+  word_t value;
+} MtraceEntry;
+MtraceEntry mring[MRING_SUM];
+
 int itrace(void);
 
 // ----------- state -----------
