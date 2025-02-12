@@ -253,6 +253,18 @@ static int cmd_mtrace(char *args){
   return mtrace();
 }
 
+static int cmd_stop(char *args){
+  //0x80000000
+  char *addr = strtok(NULL," ");
+  //get val
+  vaddr_t vaddr;
+  sscanf(addr, "%x", &vaddr);
+  if(cpu.pc==vaddr){
+    cmd_info_r();
+  }
+  return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -272,6 +284,7 @@ static struct {
   { "d", "delete watchpoint n",cmd_d},
   { "itrace", "trace instructions", cmd_itrace },
   { "mtrace", "trace memory r/w, output format:[addr: data]", cmd_mtrace},
+  { "stop", "stop ...: stop when pc=...", cmd_stop},
 
   /* TODO: Add more commands */
 

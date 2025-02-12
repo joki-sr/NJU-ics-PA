@@ -25,11 +25,11 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
     // printf("gpr[%d]\n",i);
     if(cpu.gpr[i] != ref_r->gpr[i]){
       pc = cpu.pc;
-      printf("isa_difftest_checkregs() %s: %d != %d",regs[i],  cpu.gpr[i] , ref_r->gpr[i]);
+      printf("isa_difftest_checkregs(false) $%s: %d != %d\n",regs[i],  cpu.gpr[i] , ref_r->gpr[i]);
       return false;
     }
   }
-  printf("isa_difftest_checkregs() pc:%x no problem\n", cpu.pc);
+  // printf("isa_difftest_checkregs() pc:%x no problem\n", cpu.pc);
   return true;
 }
 
