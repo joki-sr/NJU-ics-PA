@@ -46,13 +46,18 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
 }
 
-
+extern vaddr_t print_regs_at_pc;
 // 让CPU执行当前PC指向的一条指令, 然后更新PC.
 static void exec_once(Decode *s, vaddr_t pc) {
   s->pc = pc;
   s->snpc = pc;
   isa_exec_once(s);
   cpu.pc = s->dnpc;
+  
+  //-------------for debug user program
+  if(cpu.pc == print_regs_at_pc){
+    isa_reg_display();
+  }
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf; // 用于存储日志的缓冲区指针
   // 0x80000000:

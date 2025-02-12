@@ -21,7 +21,7 @@
 #include <memory/vaddr.h>
 
 static int is_batch_mode = false;
-
+extern vaddr_t print_regs_at_pc;
 void init_regex();
 void init_wp_pool();
 int itrace();
@@ -257,11 +257,7 @@ static int cmd_stop(char *args){
   //0x80000000
   char *addr = strtok(NULL," ");
   //get val
-  vaddr_t vaddr;
-  sscanf(addr, "%x", &vaddr);
-  if(cpu.pc==vaddr){
-    cmd_info_r();
-  }
+  sscanf(addr, "%x", &print_regs_at_pc);
   return 0;
 }
 
