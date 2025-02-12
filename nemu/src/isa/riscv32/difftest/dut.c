@@ -20,10 +20,10 @@
 bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
   printf("aaa\n");
   for(int i=0;i<32;i++){
-    printf("gpr[%d]\n",i);
+    // printf("gpr[%d]\n",i);
     if(cpu.gpr[i] != ref_r->gpr[i]){
       pc = cpu.pc;
-      printf("i:%d  %d != %d",i, cpu.gpr[i] , ref_r->gpr[i]);
+      // printf("i:%d  %d != %d",i, cpu.gpr[i] , ref_r->gpr[i]);
       return false;
     }
   }
