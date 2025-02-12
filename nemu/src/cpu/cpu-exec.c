@@ -57,7 +57,11 @@ static void exec_once(Decode *s, vaddr_t pc) {
   //-------------for debug user program
   if(cpu.pc == print_regs_at_pc){
     isa_reg_display();
+  }else{
+    printf("cpu.pc != print_regs_at_pc : %x %x", cpu.pc, print_regs_at_pc);
   }
+  //-------------for debug user program
+
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf; // 用于存储日志的缓冲区指针
   // 0x80000000:
