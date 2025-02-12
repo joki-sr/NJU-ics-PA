@@ -56,9 +56,10 @@ static void exec_once(Decode *s, vaddr_t pc) {
   
   //-------------for debug user program
   if(cpu.pc == print_regs_at_pc){
+    printf("for debug user program\n");
     isa_reg_display();
   }else{
-    printf("cpu.pc != print_regs_at_pc : %x %x", cpu.pc, print_regs_at_pc);
+    printf("cpu.pc != print_regs_at_pc : %x %x\n", cpu.pc, print_regs_at_pc);
   }
   //-------------for debug user program
 
