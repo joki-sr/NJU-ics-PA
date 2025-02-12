@@ -36,7 +36,11 @@ void itrace_add(char*);
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE_COND
-  if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
+  if (ITRACE_COND) { 
+    log_write("%s\n", _this->logbuf);
+    itrace_add(_this->logbuf);
+  }
+  
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
@@ -74,8 +78,8 @@ static void exec_once(Decode *s, vaddr_t pc) {
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       //x86 使用 s->snpc 作为 PC 地址（可能是下一条指令地址）；其他架构（如 RISC-V）使用 s->pc
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst.val, ilen);
-  void itrace_add(char *str);
-  itrace_add(s->logbuf);
+  // void itrace_add(char *str);
+  // itrace_add(s->logbuf);
 #else
   p[0] = '\0'; // the upstream llvm does not support loongarch32r
 #endif
