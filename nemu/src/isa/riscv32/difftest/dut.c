@@ -18,7 +18,7 @@
 #include "../local-include/reg.h"
 
 bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
-  printf("aaa\n");
+  // printf("aaa\n");
   for(int i=0;i<32;i++){
     // printf("gpr[%d]\n",i);
     if(cpu.gpr[i] != ref_r->gpr[i]){
@@ -27,7 +27,7 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
       return false;
     }
   }
-  printf("no problem\n");
+  printf("pc:%x no problem\n", cpu.pc);
   return true;
 }
 
