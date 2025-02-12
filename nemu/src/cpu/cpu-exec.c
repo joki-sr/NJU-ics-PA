@@ -51,18 +51,19 @@ extern vaddr_t print_regs_at_pc;
 static void exec_once(Decode *s, vaddr_t pc) {
   s->pc = pc;
   s->snpc = pc;
-  isa_exec_once(s);
-  cpu.pc = s->dnpc;
-  
-  //-------------for debug user program
+
+    //-------------for debug user program
   if(cpu.pc == print_regs_at_pc){
-    printf("for debug user program\n");
+    printf("For debug user program...\n before excute pc=%x\n", cpu.pc);
     isa_reg_display();
   }else{
-    printf("cpu.pc != print_regs_at_pc : %x %x\n", cpu.pc, print_regs_at_pc);
+    // printf("cpu.pc != print_regs_at_pc : %x %x\n", cpu.pc, print_regs_at_pc);
   }
   //-------------for debug user program
 
+  isa_exec_once(s);
+  cpu.pc = s->dnpc;
+  
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf; // 用于存储日志的缓冲区指针
   // 0x80000000:
