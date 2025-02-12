@@ -17,17 +17,19 @@
 #include <cpu/difftest.h>
 #include "../local-include/reg.h"
 
+extern const char *regs[];
+
 bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
   // printf("aaa\n");
   for(int i=0;i<32;i++){
     // printf("gpr[%d]\n",i);
     if(cpu.gpr[i] != ref_r->gpr[i]){
       pc = cpu.pc;
-      // printf("i:%d  %d != %d",i, cpu.gpr[i] , ref_r->gpr[i]);
+      printf("isa_difftest_checkregs() %s: %d != %d",regs[i],  cpu.gpr[i] , ref_r->gpr[i]);
       return false;
     }
   }
-  printf("pc:%x no problem\n", cpu.pc);
+  printf("isa_difftest_checkregs() pc:%x no problem\n", cpu.pc);
   return true;
 }
 
