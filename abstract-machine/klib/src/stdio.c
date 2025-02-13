@@ -32,8 +32,20 @@ void itoa(int num, char *str, int base) {
   str[str_idx] = '\0';  // **确保字符串结尾**
 }
 
+char buf[256];
 int printf(const char *fmt, ...) {
-  panic("Not implemented");
+  // panic("Not implemented");
+  memset(buf, 0, 256);
+  
+  va_list args;
+  va_start(args, fmt);
+  sprintf(buf, fmt, args);
+  va_end(args);  // 结束变参处理
+
+  int len =strlen(buf);
+  for(int i=0;i<len;i++)
+    putch(buf[i]);
+  return len;
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
@@ -41,6 +53,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 }
 
 // return out lenth
+// sprintf(buf, "%d + %d", 1,2);
 int sprintf(char *out, const char *fmt, ...) {
   va_list va;
   va_start(va, fmt);
