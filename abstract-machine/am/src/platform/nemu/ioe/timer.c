@@ -8,7 +8,7 @@ void __am_timer_init() {
 
 // 读出系统启动后的微秒数.
 void __am_timer_uptime(AM_TIMER_UPTIME_T *uptime) {
-  // uptime->us = 0;
+  uptime->us = 0;
   //读reg
   uint32_t low , high;
   low = inl(RTC_ADDR);
