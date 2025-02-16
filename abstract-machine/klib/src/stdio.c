@@ -44,7 +44,8 @@ int printf(const char *fmt, ...) {
 
   int len =strlen(buf);
   for(int i=0;i<len;i++)
-    putch(buf[i]);
+    // putch(buf[i]);
+    putch('*');
   return len;
 }
 
