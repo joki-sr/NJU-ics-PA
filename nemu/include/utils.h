@@ -23,6 +23,8 @@
 #define MRING_LEN 32
 #define IRING_SUM 16
 #define IRING_LEN 64
+#define DRING_SUM 16
+#define DRING_LEN 5
 
 int   mtrace(void);
 void  mtrace_add(paddr_t, int, word_t);
