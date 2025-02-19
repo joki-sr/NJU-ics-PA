@@ -253,6 +253,10 @@ static int cmd_mtrace(char *args){
   return mtrace();
 }
 
+static int cmd_dtrace(char *args){
+  return dtrace();
+}
+
 static int cmd_stop(char *args){
   //0x80000000
   char *addr = strtok(NULL," ");
@@ -268,19 +272,20 @@ static struct {
   const char *description;
   int (*handler) (char *);
 } cmd_table [] = {
-  { "help", "Display information about all supported commands", cmd_help },
-  { "c", "Continue the execution of the program", cmd_c },
-  { "q", "Exit NEMU", cmd_q },
-  { "x", "Scan memory and print the value", cmd_x},
-  { "si", "Execute N instructions and then stop, default: 1 step", cmd_si},
-  { "info", "r: regs / w: watching points", cmd_info},
-  { "p", "print expr",cmd_p},
-  { "test", "test expr", cmd_test},
-  { "w", "set watchpoint", cmd_w},
-  { "d", "delete watchpoint n",cmd_d},
+  { "help",   "Display information about all supported commands", cmd_help },
+  { "c",      "Continue the execution of the program", cmd_c },
+  { "q",      "Exit NEMU", cmd_q },
+  { "x",      "Scan memory and print the value", cmd_x},
+  { "si",     "Execute N instructions and then stop, default: 1 step", cmd_si},
+  { "info",   "r: regs / w: watching points", cmd_info},
+  { "p",      "print expr",cmd_p},
+  { "test",   "test expr", cmd_test},
+  { "w",      "set watchpoint", cmd_w},
+  { "d",      "delete watchpoint n",cmd_d},
   { "itrace", "trace instructions", cmd_itrace },
   { "mtrace", "trace memory r/w, output format:[addr: data]", cmd_mtrace},
-  { "stop", "stop ...: stop when pc=...", cmd_stop},
+  { "dtrace", "trace devices r/w, output format: [r/w device]", cmd_dtrace},
+  { "stop",   "stop ...: stop when pc=...", cmd_stop},
 
   /* TODO: Add more commands */
 
