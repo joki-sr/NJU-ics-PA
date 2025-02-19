@@ -79,6 +79,7 @@ void dtrace_add(const char *str, bool write){
     dring[dring_idx][0]='r';
   }
   memcpy(dring[dring_idx]+1, str, DRING_LEN-1);
+  printf("dring[%d]=%s\n", dring_idx, dring[dring_idx]);
 }
 
 int dtrace(void){
