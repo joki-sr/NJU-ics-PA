@@ -61,7 +61,8 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         size_t len = strlen(s);
         memcpy(out + out_idx, s, len);
         out_idx+=len;
-      }else if(fmt[i]=='d'){
+      }else
+      if(fmt[i]=='d'){
         // %d
         int n = va_arg(ap, int);
         char num_str[12];
@@ -69,7 +70,13 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         size_t len = strlen(num_str);
         memcpy(out + out_idx, num_str, len);
         out_idx += len;
-      }else{
+      }else
+      if(fmt[i]=='c'){
+        char ch = va_arg(ap, int);
+        out[out_idx] = ch;
+        out_idx += 1;
+      }else
+      {
         putch('%');
         putch(fmt[i]);
         assert(0);
@@ -88,34 +95,35 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 int sprintf(char *out, const char *fmt, ...) {
   va_list va;
   va_start(va, fmt);
-  size_t i = 0, out_idx = 0;
+  // size_t i = 0, out_idx = 0;
+  int out_idx = vsprintf(out, fmt, va);
 
-  for(i=0;fmt[i] != '\0';i++){
-    if(fmt[i]=='%'){
-      i++;
-      if(fmt[i]=='s'){
-        // %s
-        // strcat(out, va_arg(va,char*)); don't use this
-        char *s = va_arg(va, char*);
-        size_t len = strlen(s);
-        memcpy(out + out_idx, s, len);// 使用 memcpy() 避免 strcat() 可能的越界访问。
-        out_idx+=len;
-      }else if(fmt[i]=='d'){
-        // %d
-        int n = va_arg(va, int);
-        char num_str[12];
-        itoa(n, num_str, 10);
-        size_t len = strlen(num_str);
-        memcpy(out + out_idx, num_str, len);
-        out_idx += len;
-      }else assert(0);
-    }else{
-      // strcat(out, fmt + i); don't use this
-      out[out_idx++] = fmt[i];
-    }
-  }
+  // for(i=0;fmt[i] != '\0';i++){
+  //   if(fmt[i]=='%'){
+  //     i++;
+  //     if(fmt[i]=='s'){
+  //       // %s
+  //       // strcat(out, va_arg(va,char*)); don't use this
+  //       char *s = va_arg(va, char*);
+  //       size_t len = strlen(s);
+  //       memcpy(out + out_idx, s, len);// 使用 memcpy() 避免 strcat() 可能的越界访问。
+  //       out_idx+=len;
+  //     }else if(fmt[i]=='d'){
+  //       // %d
+  //       int n = va_arg(va, int);
+  //       char num_str[12];
+  //       itoa(n, num_str, 10);
+  //       size_t len = strlen(num_str);
+  //       memcpy(out + out_idx, num_str, len);
+  //       out_idx += len;
+  //     }else assert(0);
+  //   }else{
+  //     // strcat(out, fmt + i); don't use this
+  //     out[out_idx++] = fmt[i];
+  //   }
+  // }
 
-  out[out_idx] = '\0'; // 确保字符串正确终止
+  // out[out_idx] = '\0'; // 确保字符串正确终止
   va_end(va);
   return out_idx;
 }
