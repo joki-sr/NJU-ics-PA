@@ -69,7 +69,11 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         size_t len = strlen(num_str);
         memcpy(out + out_idx, num_str, len);
         out_idx += len;
-      }else assert(0);
+      }else{
+        putch('%');
+        putch(fmt[i]);
+        assert(0);
+      }
     }else{
       // strcat(out, fmt + i); don't use this
       out[out_idx++] = fmt[i];
