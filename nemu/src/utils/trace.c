@@ -52,3 +52,41 @@ int itrace(void){
   }
   return 0;
 }
+
+// ----------- ftrace -----------
+void init_ftrace(char* elf_file){
+  panic("not implemented\n");
+  // int fp = fopen(elf_file, "r");
+
+
+
+  
+  
+  // fclose(fp);
+}
+
+// ----------- dtrace -----------
+char dring[DRING_SUM][DRING_LEN] = {};
+int dring_idx = 0;
+// int
+void dtrace_add(const char *str, bool write){
+  dring_idx = (dring_idx + 1)%DRING_SUM;
+  if(write){
+    dring[dring_idx][0]='w';
+  }else{
+    dring[dring_idx][0]='r';
+  }
+  memcpy(dring[dring_idx]+1, str, DRING_LEN-1);
+}
+
+int dtrace(void){
+  printf("dtrace\n");
+  for(int i=0;DRING_SUM;i++){
+    if(i==dring_idx){
+      printf("-->");
+    }else{
+      printf("   ");
+    }
+    printf("%s\n", dring[i]);
+  }
+}

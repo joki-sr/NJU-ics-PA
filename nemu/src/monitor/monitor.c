@@ -85,12 +85,13 @@ static int parse_args(int argc, char *argv[]) {
     {0          , 0                , NULL,  0 },
   };
   int o; // option
-  while ( (o = getopt_long(argc, argv, "-bhl:d:p:", table, NULL)) != -1) {
+  while ( (o = getopt_long(argc, argv, "-bhl:d:p:f:", table, NULL)) != -1) {
     switch (o) {
       case 'b': sdb_set_batch_mode(); break;
       case 'p': sscanf(optarg, "%d", &difftest_port); break; //将 optarg 转换为整数并赋值给 difftest_port
       case 'l': log_file = optarg; break; // 将 optarg（选项的参数）赋值给 log_file
       case 'd': diff_so_file = optarg; break;
+      // case 'f': init_ftrace(optarg);break;
       case 1: img_file = optarg; return 0;
       default:
         printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);

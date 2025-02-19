@@ -29,7 +29,9 @@
 int   mtrace(void);
 void  mtrace_add(paddr_t, int, word_t);
 int   itrace(void);
-void  itrace_add(char *str);
+void  itrace_add(char *);
+void  dtrace_add(const char *, bool);
+int   dtrace(void);
 
 typedef struct {
   paddr_t addr;
