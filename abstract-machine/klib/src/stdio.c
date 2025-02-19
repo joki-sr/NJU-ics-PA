@@ -72,7 +72,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         out_idx += len;
       }else
       if(fmt[i]=='c'){
-        char ch = va_arg(ap, int);
+        char ch = va_arg(ap, int); //‘char’ is promoted to ‘int’ when passed through ‘...’
         out[out_idx] = ch;
         out_idx += 1;
       }else
