@@ -81,12 +81,13 @@ void dtrace_add(const char *str, bool write){
 
 int dtrace(void){
   printf("dtrace\n");
-  for(int i=0;DRING_SUM;i++){
+  for(int i=0;i<DRING_SUM;i++){
     if(i==dring_idx){
       printf("-->");
     }else{
       printf("   ");
     }
-    printf("%s\n", dring[i]);
+    printf("%c %s\n", dring[i][0], dring[i]+1);
   }
+  return 0;
 }
