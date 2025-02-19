@@ -37,6 +37,7 @@ int iring_idx =0;
 void itrace_add(char *str){
   iring_idx = (iring_idx + 1) % IRING_SUM;
   // iring[iring_idx] = *str;
+  memset(iring[iring_idx], 0, IRING_LEN);
   memcpy(iring[iring_idx], str, IRING_LEN);
 }
 
@@ -71,6 +72,7 @@ int dring_idx = 0;
 // int
 void dtrace_add(const char *str, bool write){
   dring_idx = (dring_idx + 1)%DRING_SUM;
+  memset(dring[dring_idx], 0, DRING_LEN);
   if(write){
     dring[dring_idx][0]='w';
   }else{
